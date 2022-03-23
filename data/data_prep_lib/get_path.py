@@ -7,7 +7,9 @@ import os
 
 prefix0 = 'data'
 prefix1 = 's-iid' #TODO: customise dataset name here
+prefix2 = 'images'
 prefix = os.path.join(prefix0, prefix1)
+prefix = os.path.join(prefix, prefix2)
 
 with open('train.txt', 'w') as f0:
     for filename in os.listdir('images/train'):

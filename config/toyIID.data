@@ -1,0 +1,4 @@
+classes= 2
+train=data/s-iid/train.txt
+valid=data/s-iid/valid.txt
+names=data/s-iid/dd.names

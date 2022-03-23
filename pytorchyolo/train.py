@@ -62,8 +62,9 @@ def run():
     parser = argparse.ArgumentParser(description="Trains the YOLO model.")
     parser.add_argument("-m", "--model", type=str, default="config/yolov3.cfg", help="Path to model definition file (.cfg)")
     parser.add_argument("-d", "--data", type=str, default="config/coco.data", help="Path to data config file (.data)")
-    parser.add_argument("-e", "--epochs", type=int, default=300, help="Number of epochs")
+    parser.add_argument("-e", "--epochs", type=int, default=20, help="Number of epochs")
     parser.add_argument("-v", "--verbose", action='store_true', help="Makes the training more verbose")
+    parser.add_argument("--batch", type=int, default=0, help="override batch size instead of hardware specific batch size")
     parser.add_argument("--n_cpu", type=int, default=8, help="Number of cpu threads to use during batch generation")
     parser.add_argument("--pretrained_weights", type=str, help="Path to checkpoint file (.weights or .pth). Starts training from checkpoint model")
     parser.add_argument("--checkpoint_interval", type=int, default=1, help="Interval of epochs between saving model weights")
@@ -102,8 +103,12 @@ def run():
     # Print model
     if args.verbose:
         summary(model, input_size=(3, model.hyperparams['height'], model.hyperparams['height']))
-
-    mini_batch_size = model.hyperparams['batch'] // model.hyperparams['subdivisions']
+    
+    if args.batch == 0:
+        mini_batch_size = model.hyperparams['batch'] // model.hyperparams['subdivisions']
+    else:
+        mini_batch_size = args.batch
+    print('Batch Size is: ', str(mini_batch_size))
 
     # #################
     # Create Dataloader
